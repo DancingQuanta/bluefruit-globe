@@ -140,6 +140,8 @@ while True:
                 elif packet.button == ButtonPacket.BUTTON_2:
                     color = GREEN
                     neopixels.fill(color)
+                    mode = 'glow'
+                    state = 'initial'
 
                 elif packet.button == ButtonPacket.BUTTON_3:
                     color = BLUE
@@ -236,6 +238,51 @@ while True:
                     neopixels.fill(color)
                     state = ''
                     mode = ''
+
+                # Record time since last
+                LAST_TIME = now
+
+        elif "glow" in mode:
+            # What is the time?
+            now = time.monotonic()
+
+            if now >= LAST_TIME + TIME_INTERVAL:
+
+                if 'initial' in state:
+                    pwm.duty_cycle = int(pwm_max * 0.70)
+                    i = 0
+                    steps = 100
+                    neopixels.fill((255, 255, 255))
+                    neopixels.brightness = 0
+                    TIME_INTERVAL = 0.1
+                    state = 'ramp_down'
+
+                elif 'ramp_up' in state:
+
+                    # LED up and down
+
+                    if i < steps:
+                        # Up ramp
+                        neopixels.brightness = i / steps
+                        print("LED level {}".format(neopixels.brightness))
+                        i += 1
+                    else:
+                        state = 'ramp_down'
+                        i = 0
+
+                elif 'ramp_down' in state:
+
+                    # PWM up and down
+
+                    if i < steps:
+                        # Down ramp
+                        neopixels.brightness = 1 - (i / steps)
+                        print("LED level {}".format(neopixels.brightness))
+                        i += 1
+                    else:
+                        neopixels.brightness = 0
+                        i = 0
+                        state = 'ramp_up'
 
                 # Record time since last
                 LAST_TIME = now
