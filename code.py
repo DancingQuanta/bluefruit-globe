@@ -100,6 +100,7 @@ while True:
                         neopixels.fill(color)
                         pwm_step_n += 1
                         pwm.duty_cycle = pwm_step_n * pwm_step - 1
+                        print("PWM level {}".format(pwm.duty_cycle))
 
                 elif packet.button == ButtonPacket.DOWN:
                     # Step down PWM
@@ -113,12 +114,15 @@ while True:
                         else:
                             pwm.duty_cycle = 0
 
+                        print("PWM level {}".format(pwm.duty_cycle))
+
                 elif packet.button == ButtonPacket.RIGHT:
                     # Turn PWM off
                     color = YELLOW
                     neopixels.fill(color)
                     pwm_step_n = pwm_step_n_max
                     pwm.duty_cycle = pwm_max
+                    print("PWM level {}".format(pwm.duty_cycle))
 
                 elif packet.button == ButtonPacket.LEFT:
                     # Turn PWM fully on
@@ -126,6 +130,7 @@ while True:
                     neopixels.fill(color)
                     pwm_step_n = 0
                     pwm.duty_cycle = 0
+                    print("PWM level {}".format(pwm.duty_cycle))
 
                 elif packet.button == ButtonPacket.BUTTON_1:
                     # Start ramp state machine
@@ -202,6 +207,7 @@ while True:
                     if i < steps:
                         # Up ramp
                         pwm.duty_cycle = int(pwm_max * (1 + (1 - min_frac) * (i/steps - 1)))
+                        print("PWM level {}".format(pwm.duty_cycle))
                         neopixel_index = i // 5
                         neopixels[neopixel_index] = RED
                         i += 1
@@ -216,6 +222,7 @@ while True:
                     if i < steps:
                          # Down ramp
                         pwm.duty_cycle = int(pwm_max * (1 - (1 - min_frac) * i / steps))
+                        print("PWM level {}".format(pwm.duty_cycle))
                         neopixel_index = 9 - i // 5
                         neopixels[neopixel_index] = AQUA
                         i += 1
