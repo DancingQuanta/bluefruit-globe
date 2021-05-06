@@ -192,12 +192,13 @@ while True:
                     neopixels.fill(AQUA)
 
                     # Set 0% PWM
-                    pwm.duty_cycle = pwm_max_half
+                    pwm.duty_cycle = 0
 
                     # Transition to next state
                     state = 'ramp_up'
                     steps = 50
                     min_frac = 0.5
+                    max_frac = 0.70
                     i = 0
 
                 elif 'ramp_up' in state:
@@ -206,7 +207,7 @@ while True:
 
                     if i < steps:
                         # Up ramp
-                        pwm.duty_cycle = int(pwm_max * (1 + (1 - min_frac) * (i/steps - 1)))
+                        pwm.duty_cycle = int(pwm_max * max_frac * (1 + (1 - min_frac) * (i/steps - 1)))
                         print("PWM level {}".format(pwm.duty_cycle))
                         neopixel_index = i // 5
                         neopixels[neopixel_index] = RED
@@ -221,7 +222,7 @@ while True:
 
                     if i < steps:
                          # Down ramp
-                        pwm.duty_cycle = int(pwm_max * (1 - (1 - min_frac) * i / steps))
+                        pwm.duty_cycle = int(pwm_max * max_frac * (1 - (1 - min_frac) * i / steps))
                         print("PWM level {}".format(pwm.duty_cycle))
                         neopixel_index = 9 - i // 5
                         neopixels[neopixel_index] = AQUA
