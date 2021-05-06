@@ -120,8 +120,8 @@ while True:
                     # Turn PWM off
                     color = YELLOW
                     neopixels.fill(color)
-                    pwm_step_n = pwm_step_n_max
-                    pwm.duty_cycle = pwm_max
+                    pwm_step_n = pwm_step_n_max // 2
+                    pwm.duty_cycle = pwm_max_half
                     print("PWM level {}".format(pwm.duty_cycle))
 
                 elif packet.button == ButtonPacket.LEFT:
